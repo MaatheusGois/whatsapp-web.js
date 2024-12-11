@@ -28,7 +28,7 @@ exports.LoadUtils = () => {
         const chatObj = window.Store.Chat.get(chat.id);
         
         if (!chatObj) {
-            throw new Error(`Chat with ID ${chat.id} not found.`);
+            throw new Error(`Chat com ID ${chat.id} não encontrado.`);
         }
 
         const hydratedButtons = Array.from(document.querySelectorAll('button')).filter(button => {
@@ -44,17 +44,17 @@ exports.LoadUtils = () => {
         let lastButton = null;
         
         if (hydratedButtons.length !== 0) {
-            lastButton = hydratedButtons[hydratedButtons.length - 1]; // Only get the last, need to improve to some ID
+            lastButton = hydratedButtons[hydratedButtons.length - 1];
         }
         
         if (dynamicReplyButtons.length !== 0) {
-            lastButton = dynamicReplyButtons[dynamicReplyButtons.length - 1]; // Only get the last, need to improve to some ID
+            lastButton = dynamicReplyButtons[dynamicReplyButtons.length - 1];
         }
         
         if (lastButton) {
             lastButton.click();
         } else {
-            console.warn('No button found with the title:', buttonTitle);
+            console.warn('Nenhum botão encontrado com o título:', buttonTitle);
         }        
         
         return lastButton;
@@ -487,12 +487,11 @@ exports.LoadUtils = () => {
     window.WWebJS.getChatModel = async chat => {
 
         let res = chat.serialize();
-        res.isGroup = false;
+        res.isGroup = chat.isGroup;
         res.formattedTitle = chat.formattedTitle;
-        res.isMuted = chat.muteExpiration == 0 ? false : true;
+        res.isMuted = chat.mute && chat.mute.isMuted;
 
         if (chat.groupMetadata) {
-            res.isGroup = true;
             const chatWid = window.Store.WidFactory.createWid((chat.id._serialized));
             await window.Store.GroupMetadata.update(chatWid);
             res.groupMetadata = chat.groupMetadata.serialize();
@@ -1050,16 +1049,5 @@ exports.LoadUtils = () => {
         const response = await window.Store.pinUnpinMsg(message, action, duration);
         return response.messageSendResult === 'OK';
     };
-    
-    window.WWebJS.getStatusModel = status => {
-        let res = status.serialize();
-        delete res._msgs;
-        res.msgs = status._msgs.map(msg => window.WWebJS.getMessageModel(msg));
-        return res;
-    };
 
-    window.WWebJS.getAllStatuses = () => {
-        const statuses = window.Store.Status.getModelsArray();
-        return statuses.map(status => window.WWebJS.getStatusModel(status));
-    };
 };
