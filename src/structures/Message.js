@@ -279,6 +279,11 @@ class Message extends Base {
             this.dynamicReplyButtons = data.dynamicReplyButtons;
         }
 
+        /** Buttons */
+        if (data.hydratedButtons) {
+            this.hydratedButtons = data.hydratedButtons;
+        }
+
         /** Selected Button Id **/
         if (data.selectedButtonId) {
             this.selectedButtonId = data.selectedButtonId;
