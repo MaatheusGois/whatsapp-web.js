@@ -928,9 +928,9 @@ declare namespace WAWebJS {
         /** Last edit message author */
         latestEditMsgKey?: MessageId,
         /** Message buttons */
-        dynamicReplyButtons?: object,
+        dynamicReplyButtons?: object[],
         /** Message buttons */
-        hydratedButtons?: object,
+        hydratedButtons?: object[],
         /** Selected button ID */
         selectedButtonId?: string,
         /** Selected list row ID */
